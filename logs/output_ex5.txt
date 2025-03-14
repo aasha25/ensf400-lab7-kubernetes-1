@@ -1,0 +1,38 @@
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1 (main) $ minikube addons enable ingress
+💡  ingress is an addon maintained by Kubernetes. For any concerns contact minikube on GitHub.
+You can view the list of minikube maintainers at: https://github.com/kubernetes/minikube/blob/master/OWNERS
+    ▪ Using image registry.k8s.io/ingress-nginx/controller:v1.11.2
+    ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.4.3
+    ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.4.3
+🔎  Verifying ingress addon...
+🌟  The 'ingress' addon is enabled
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1 (main) $ kubectl get pods --all-namespaces -l app.kubernetes.io/name=ingress-nginx
+NAMESPACE       NAME                                       READY   STATUS      RESTARTS   AGE
+ingress-nginx   ingress-nginx-admission-create-pzhq9       0/1     Completed   0          50s
+ingress-nginx   ingress-nginx-admission-patch-j2mj2        0/1     Completed   0          49s
+ingress-nginx   ingress-nginx-controller-bc57996ff-p7s8r   1/1     Running     0          50s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1 (main) $ cd /workspaces/ensf400-lab7-kubernetes-1/5-ingress
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/5-ingress (main) $ kubectl apply -f apple.yaml
+pod/apple-app created
+service/apple-service created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/5-ingress (main) $ kubectl apply -f banana.yaml
+pod/banana-app created
+service/banana-service created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/5-ingress (main) $ kubectl create -f ingress.yaml
+ingress.networking.k8s.io/example-ingress created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/5-ingress (main) $ minikube ip
+192.168.49.2
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/5-ingress (main) $ curl -kL http://<Minikube IP>/apple
+bash: Minikube: No such file or directory
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/5-ingress (main) $ curl -kL http://192.168.49.2/apple
+apple
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/5-ingress (main) $ curl -kL http://192.168.49.2/banana
+banana
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/5-ingress (main) $ curl -kL http://192.168.49.2/notfound
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
