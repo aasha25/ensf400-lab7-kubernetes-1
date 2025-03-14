@@ -1,0 +1,165 @@
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1 (main) $ cd /workspaces/ensf400-lab7-kubernetes-1/2-replicasets
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl apply -f nginx_replicaset.yaml
+replicaset.apps/web created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get rs
+NAME   DESIRED   CURRENT   READY   AGE
+web    4         4         4       11s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods web-6n9cj -o yaml | grep -A 5 owner
+Error from server (NotFound): pods "web-6n9cj" not found
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods web-6n9cj -o yaml
+Error from server (NotFound): pods "web-6n9cj" not found
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods
+NAME        READY   STATUS    RESTARTS   AGE
+web-c4cz4   1/1     Running   0          4m15s
+web-l6stj   1/1     Running   0          4m15s
+web-lhfgc   1/1     Running   0          4m15s
+web-ll445   1/1     Running   0          4m15s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get replicaset
+NAME   DESIRED   CURRENT   READY   AGE
+web    4         4         4       4m31s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods -o wide
+NAME        READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+web-c4cz4   1/1     Running   0          4m40s   10.244.0.10   minikube   <none>           <none>
+web-l6stj   1/1     Running   0          4m40s   10.244.0.11   minikube   <none>           <none>
+web-lhfgc   1/1     Running   0          4m40s   10.244.0.9    minikube   <none>           <none>
+web-ll445   1/1     Running   0          4m40s   10.244.0.8    minikube   <none>           <none>
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods web-6n9cj -o yaml | grep -A 5 owner
+Error from server (NotFound): pods "web-6n9cj" not found
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get po
+NAME        READY   STATUS    RESTARTS   AGE
+web-c4cz4   1/1     Running   0          6m21s
+web-l6stj   1/1     Running   0          6m21s
+web-lhfgc   1/1     Running   0          6m21s
+web-ll445   1/1     Running   0          6m21s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods web-c4cz4 -o yaml | grep -A 5 owner
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: web
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl edit pods web-c4cz4
+pod/web-c4cz4 edited
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods -o wide
+NAME        READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+web-4zdbw   1/1     Running   0          8s    10.244.0.12   minikube   <none>           <none>
+web-c4cz4   1/1     Running   0          18m   10.244.0.10   minikube   <none>           <none>
+web-l6stj   1/1     Running   0          18m   10.244.0.11   minikube   <none>           <none>
+web-lhfgc   1/1     Running   0          18m   10.244.0.9    minikube   <none>           <none>
+web-ll445   1/1     Running   0          18m   10.244.0.8    minikube   <none>           <none>
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl scale --replicas=6 -f nginx_replicaset.yaml
+replicaset.apps/web scaled
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl autoscale rs web --max=5
+horizontalpodautoscaler.autoscaling/web autoscaled
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl apply -f orphan.yaml
+pod/orphan created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods -o wide
+NAME        READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+web-4zdbw   1/1     Running   0          3m34s   10.244.0.12   minikube   <none>           <none>
+web-c4cz4   1/1     Running   0          21m     10.244.0.10   minikube   <none>           <none>
+web-l6stj   1/1     Running   0          21m     10.244.0.11   minikube   <none>           <none>
+web-lhfgc   1/1     Running   0          21m     10.244.0.9    minikube   <none>           <none>
+web-ll445   1/1     Running   0          21m     10.244.0.8    minikube   <none>           <none>
+web-lqbkd   1/1     Running   0          2m51s   10.244.0.13   minikube   <none>           <none>
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl delete -f nginx_replicaset.yaml
+replicaset.apps "web" deleted
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl apply -f nginx_replicaset.yaml
+replicaset.apps/web created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods
+NAME        READY   STATUS    RESTARTS   AGE
+web-c4cz4   1/1     Running   0          23m
+web-l9527   1/1     Running   0          33s
+web-prqnb   1/1     Running   0          33s
+web-qlgww   1/1     Running   0          33s
+web-xnl6l   1/1     Running   0          33s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl apply -f orphan.yaml
+pod/orphan created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods
+NAME        READY   STATUS    RESTARTS   AGE
+web-c4cz4   1/1     Running   0          25m
+web-l9527   1/1     Running   0          2m27s
+web-prqnb   1/1     Running   0          2m27s
+web-qlgww   1/1     Running   0          2m27s
+web-xnl6l   1/1     Running   0          2m27s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl delete -f nginx_replicaset.yaml
+replicaset.apps "web" deleted
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl apply -f nginx_replicaset.yaml
+replicaset.apps/web created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods
+NAME        READY   STATUS    RESTARTS   AGE
+web-2zrq8   1/1     Running   0          12s
+web-5jcjk   1/1     Running   0          12s
+web-c4cz4   1/1     Running   0          26m
+web-szkp2   1/1     Running   0          12s
+web-z4kr5   1/1     Running   0          12s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl apply -f orphan.yaml
+pod/orphan created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get rs
+NAME   DESIRED   CURRENT   READY   AGE
+web    4         4         4       23m
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl describe replicaset web
+Name:         web
+Namespace:    default
+Selector:     role=web
+Labels:       env=dev
+              role=web
+Annotations:  <none>
+Replicas:     4 current / 4 desired
+Pods Status:  4 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  role=web
+  Containers:
+   testnginx:
+    Image:         nginx
+    Port:          <none>
+    Host Port:     <none>
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  23m   replicaset-controller  Created pod: web-2zrq8
+  Normal  SuccessfulCreate  23m   replicaset-controller  Created pod: web-z4kr5
+  Normal  SuccessfulCreate  23m   replicaset-controller  Created pod: web-5jcjk
+  Normal  SuccessfulCreate  23m   replicaset-controller  Created pod: web-szkp2
+  Normal  SuccessfulDelete  38s   replicaset-controller  Deleted pod: orphan
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl apply -f orphan.yaml
+pod/orphan created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods
+NAME        READY   STATUS    RESTARTS   AGE
+orphan      1/1     Running   0          33s
+web-2zrq8   1/1     Running   0          24m
+web-5jcjk   1/1     Running   0          24m
+web-c4cz4   1/1     Running   0          51m
+web-szkp2   1/1     Running   0          24m
+web-z4kr5   1/1     Running   0          24m
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl delete pods orphan
+pod "orphan" deleted
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get pods
+NAME        READY   STATUS    RESTARTS   AGE
+web-2zrq8   1/1     Running   0          25m
+web-5jcjk   1/1     Running   0          25m
+web-c4cz4   1/1     Running   0          52m
+web-szkp2   1/1     Running   0          25m
+web-z4kr5   1/1     Running   0          25m
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl delete rs ReplicaSet_name
+Error from server (NotFound): replicasets.apps "ReplicaSet_name" not found
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl delete -f nginx_replicaset.yaml
+kubectl delete -f nginx_replicaset.yaml
+^[[A^[[D^[[C^[[B^[[A^[[Akubectl delete -f nginx_replicaset.yaml
+replicaset.apps "web" deleted
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl delete -f nginx_replicaset.yaml
+Error from server (NotFound): error when deleting "nginx_replicaset.yaml": replicasets.apps "web" not found
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl delete rs ReplicaSet_namekubectl delete -f nginx_replicaset.yaml
+error: when paths, URLs, or stdin is provided as input, you may not specify resource arguments as well
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl delete rs nginx_replicaset.yaml --cascade=false
+warning: --cascade=false is deprecated (boolean value) and can be replaced with --cascade=orphan.
+Error from server (NotFound): replicasets.apps "nginx_replicaset.yaml" not found
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl delete rs nginx_replicaset --cascade=false
+warning: --cascade=false is deprecated (boolean value) and can be replaced with --cascade=orphan.
+Error from server (NotFound): replicasets.apps "nginx_replicaset" not found
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/2-replicasets (main) $ kubectl get rs
+No resources found in default namespace.

@@ -1,0 +1,10 @@
+    1  minikube start
+    2  kubectl apply -f <pod config file>
+    3  cd /workspaces/ensf400-lab7-kubernetes-1/1-pods
+    4  kubectl apply -f pods01.yaml
+    5  kubectl get pods
+    6  kubectl get pods -o wide
+    7  $ kubectl get pods -o json
+    8  kubectl get pods -o wide
+    9  cat terminal_log.txt
+   10  history > commands_ex2.txt

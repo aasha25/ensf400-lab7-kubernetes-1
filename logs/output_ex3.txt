@@ -1,0 +1,369 @@
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1 (main) $ cd /workspaces/ensf400-lab7-kubernetes-1/3-deployments
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl create -f nginx-dep.yaml
+deployment.apps/nginx-deployment created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl get deployments
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   0/2     2            0           11s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl describe deploy
+Name:                   nginx-deployment
+Namespace:              default
+CreationTimestamp:      Fri, 14 Mar 2025 10:20:27 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=nginx,run=my-nginx
+Replicas:               2 desired | 2 updated | 2 total | 0 available | 2 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx
+           run=my-nginx
+  Containers:
+   nginx:
+    Image:         nginx:1.7.9
+    Port:          80/TCP
+    Host Port:     0/TCP
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deployment-79c969d48f (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  23s   deployment-controller  Scaled up replica set nginx-deployment-79c969d48f to 2
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl get deployments
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   0/2     2            0           67s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl get po
+NAME                                READY   STATUS             RESTARTS   AGE
+nginx-deployment-79c969d48f-45ccd   0/1     ImagePullBackOff   0          78s
+nginx-deployment-79c969d48f-kh5pt   0/1     ImagePullBackOff   0          78s
+web-c4cz4                           1/1     Running            0          91m
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl scale deployments/nginx-deployment --replicas=4
+deployment.apps/nginx-deployment scaled
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl get deployments
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   0/4     4            0           105s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl describe deployments/nginx-deployment
+Name:                   nginx-deployment
+Namespace:              default
+CreationTimestamp:      Fri, 14 Mar 2025 10:20:27 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=nginx,run=my-nginx
+Replicas:               4 desired | 4 updated | 4 total | 0 available | 4 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx
+           run=my-nginx
+  Containers:
+   nginx:
+    Image:         nginx:1.7.9
+    Port:          80/TCP
+    Host Port:     0/TCP
+    Environment:   <none>
+    Mounts:        <none>
+  Volumes:         <none>
+  Node-Selectors:  <none>
+  Tolerations:     <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      False   MinimumReplicasUnavailable
+  Progressing    True    ReplicaSetUpdated
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-deployment-79c969d48f (4/4 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  116s  deployment-controller  Scaled up replica set nginx-deployment-79c969d48f to 2
+  Normal  ScalingReplicaSet  22s   deployment-controller  Scaled up replica set nginx-deployment-79c969d48f to 4 from 2
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl get pods -o wide
+NAME                                READY   STATUS             RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+nginx-deployment-79c969d48f-45ccd   0/1     ImagePullBackOff   0          2m10s   10.244.0.25   minikube   <none>           <none>
+nginx-deployment-79c969d48f-kh5pt   0/1     ImagePullBackOff   0          2m10s   10.244.0.24   minikube   <none>           <none>
+nginx-deployment-79c969d48f-nwfvq   0/1     ErrImagePull       0          36s     10.244.0.26   minikube   <none>           <none>
+nginx-deployment-79c969d48f-z7vx4   0/1     ErrImagePull       0          36s     10.244.0.27   minikube   <none>           <none>
+web-c4cz4                           1/1     Running            0          92m     10.244.0.10   minikube   <none>           <none>
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl scale deployments/nginx-deployment --replicas=2
+deployment.apps/nginx-deployment scaled
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl get deployments
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deployment   0/2     2            0           2m32s
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl set image  deployments/nginx-deployment nginx=nginx:1.9.1
+deployment.apps/nginx-deployment image updated
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl get pods -w
+NAME                                READY   STATUS             RESTARTS   AGE
+nginx-deployment-676b945747-ssq5b   0/1     ErrImagePull       0          9s
+nginx-deployment-79c969d48f-45ccd   0/1     ImagePullBackOff   0          2m54s
+nginx-deployment-79c969d48f-kh5pt   0/1     ImagePullBackOff   0          2m54s
+web-c4cz4                           1/1     Running            0          93m
+nginx-deployment-676b945747-ssq5b   0/1     ImagePullBackOff   0          13s
+nginx-deployment-676b945747-ssq5b   0/1     ErrImagePull       0          26s
+^[[Anginx-deployment-79c969d48f-45ccd   0/1     ErrImagePull       0          3m20s
+nginx-deployment-79c969d48f-kh5pt   0/1     ErrImagePull       0          3m21s
+^[[Bnginx-deployment-676b945747-ssq5b   0/1     ImagePullBackOff   0          40s
+
+nginx-deployment-79c969d48f-45ccd   0/1     ImagePullBackOff   0          3m32s
+ nginx-deployment-79c969d48f-kh5pt   0/1     ImagePullBackOff   0          3m35s
+
+
+
+ nginx-deployment-676b945747-ssq5b   0/1     ErrImagePull       0          56s
+nginx-deployment-676b945747-ssq5b   0/1     ImagePullBackOff   0          70s
+nginx-deployment-676b945747-ssq5b   0/1     ErrImagePull       0          107s
+nginx-deployment-676b945747-ssq5b   0/1     ImagePullBackOff   0          2m1s
+nginx-deployment-676b945747-ssq5b   0/1     ErrImagePull       0          3m11s
+nginx-deployment-79c969d48f-45ccd   0/1     ErrImagePull       0          6m3s
+nginx-deployment-676b945747-ssq5b   0/1     ImagePullBackOff   0          3m23s
+nginx-deployment-79c969d48f-kh5pt   0/1     ErrImagePull       0          6m10s
+nginx-deployment-79c969d48f-45ccd   0/1     ImagePullBackOff   0          6m16s
+nginx-deployment-79c969d48f-kh5pt   0/1     ImagePullBackOff   0          6m23s
+nginx-deployment-676b945747-ssq5b   0/1     ErrImagePull       0          6m2s
+nginx-deployment-676b945747-ssq5b   0/1     ImagePullBackOff   0          6m16s
+nginx-deployment-79c969d48f-45ccd   0/1     ErrImagePull       0          11m
+nginx-deployment-79c969d48f-45ccd   0/1     ImagePullBackOff   0          11m
+nginx-deployment-79c969d48f-kh5pt   0/1     ErrImagePull       0          11m
+nginx-deployment-79c969d48f-kh5pt   0/1     ImagePullBackOff   0          11m
+^C@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl describe pods
+Name:             nginx-deployment-676b945747-ssq5b
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Mar 2025 10:23:12 +0000
+Labels:           app=nginx
+                  pod-template-hash=676b945747
+                  run=my-nginx
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.28
+IPs:
+  IP:           10.244.0.28
+Controlled By:  ReplicaSet/nginx-deployment-676b945747
+Containers:
+  nginx:
+    Container ID:   
+    Image:          nginx:1.9.1
+    Image ID:       
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-sw7df (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-sw7df:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                  From               Message
+  ----     ------     ----                 ----               -------
+  Normal   Scheduled  10m                  default-scheduler  Successfully assigned default/nginx-deployment-676b945747-ssq5b to minikube
+  Normal   Pulling    9m10s (x4 over 10m)  kubelet            Pulling image "nginx:1.9.1"
+  Warning  Failed     9m8s (x4 over 10m)   kubelet            Failed to pull image "nginx:1.9.1": [DEPRECATION NOTICE] Docker Image Format v1 and Docker Image manifest version 2, schema 1 support is disabled by default and will be removed in an upcoming release. Suggest the author of docker.io/library/nginx:1.9.1 to upgrade the image to the OCI Format or Docker Image manifest v2, schema 2. More information at https://docs.docker.com/go/deprecated-image-specs/
+  Warning  Failed     9m8s (x4 over 10m)   kubelet            Error: ErrImagePull
+  Warning  Failed     8m56s (x6 over 10m)  kubelet            Error: ImagePullBackOff
+  Normal   BackOff    39s (x41 over 10m)   kubelet            Back-off pulling image "nginx:1.9.1"
+
+
+Name:             nginx-deployment-79c969d48f-45ccd
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Mar 2025 10:20:27 +0000
+Labels:           app=nginx
+                  pod-template-hash=79c969d48f
+                  run=my-nginx
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.25
+IPs:
+  IP:           10.244.0.25
+Controlled By:  ReplicaSet/nginx-deployment-79c969d48f
+Containers:
+  nginx:
+    Container ID:   
+    Image:          nginx:1.7.9
+    Image ID:       
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-zj6lv (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-zj6lv:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                   From               Message
+  ----     ------     ----                  ----               -------
+  Normal   Scheduled  13m                   default-scheduler  Successfully assigned default/nginx-deployment-79c969d48f-45ccd to minikube
+  Normal   Pulling    11m (x4 over 13m)     kubelet            Pulling image "nginx:1.7.9"
+  Warning  Failed     11m (x4 over 13m)     kubelet            Failed to pull image "nginx:1.7.9": [DEPRECATION NOTICE] Docker Image Format v1 and Docker Image manifest version 2, schema 1 support is disabled by default and will be removed in an upcoming release. Suggest the author of docker.io/library/nginx:1.7.9 to upgrade the image to the OCI Format or Docker Image manifest v2, schema 2. More information at https://docs.docker.com/go/deprecated-image-specs/
+  Warning  Failed     11m (x4 over 13m)     kubelet            Error: ErrImagePull
+  Warning  Failed     11m (x6 over 13m)     kubelet            Error: ImagePullBackOff
+  Normal   BackOff    3m26s (x42 over 13m)  kubelet            Back-off pulling image "nginx:1.7.9"
+
+
+Name:             nginx-deployment-79c969d48f-kh5pt
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Mar 2025 10:20:27 +0000
+Labels:           app=nginx
+                  pod-template-hash=79c969d48f
+                  run=my-nginx
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.24
+IPs:
+  IP:           10.244.0.24
+Controlled By:  ReplicaSet/nginx-deployment-79c969d48f
+Containers:
+  nginx:
+    Container ID:   
+    Image:          nginx:1.7.9
+    Image ID:       
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-s7rt2 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-s7rt2:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason     Age                   From               Message
+  ----     ------     ----                  ----               -------
+  Normal   Scheduled  13m                   default-scheduler  Successfully assigned default/nginx-deployment-79c969d48f-kh5pt to minikube
+  Normal   Pulling    11m (x4 over 13m)     kubelet            Pulling image "nginx:1.7.9"
+  Warning  Failed     11m (x4 over 13m)     kubelet            Failed to pull image "nginx:1.7.9": [DEPRECATION NOTICE] Docker Image Format v1 and Docker Image manifest version 2, schema 1 support is disabled by default and will be removed in an upcoming release. Suggest the author of docker.io/library/nginx:1.7.9 to upgrade the image to the OCI Format or Docker Image manifest v2, schema 2. More information at https://docs.docker.com/go/deprecated-image-specs/
+  Warning  Failed     11m (x4 over 13m)     kubelet            Error: ErrImagePull
+  Warning  Failed     11m (x6 over 13m)     kubelet            Error: ImagePullBackOff
+  Normal   BackOff    3m25s (x42 over 13m)  kubelet            Back-off pulling image "nginx:1.7.9"
+
+
+Name:             web-c4cz4
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Mar 2025 08:49:50 +0000
+Labels:           role=isolated
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.10
+IPs:
+  IP:  10.244.0.10
+Containers:
+  testnginx:
+    Container ID:   docker://8cd6979bacd7b64d7de14f04a46bbbd457b6b00e13e6747838ca9f7ef5e24210
+    Image:          nginx
+    Image ID:       docker-pullable://nginx@sha256:9d6b58feebd2dbd3c56ab5853333d627cc6e281011cfd6050fa4bcf2072c9496
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Fri, 14 Mar 2025 08:49:54 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-jttnk (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-jttnk:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:                      <none>
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl rollout undo deployments/nginx-deployment
+deployment.apps/nginx-deployment rolled back
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl rollout status deployments/nginx-deployment
+Waiting for deployment "nginx-deployment" rollout to finish: 1 old replicas are pending termination...
+^[[B^[[D^C@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl rollout status deployments/nginx-deployment
+Waiting for deployment "nginx-deployment" rollout to finish: 1 old replicas are pending termination...
+error: deployment "nginx-deployment" exceeded its progress deadline
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl rollout status deployments/nginx-deployment
+error: deployment "nginx-deployment" exceeded its progress deadline
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/3-deployments (main) $ kubectl describe deployments | grep Strategy
+StrategyType:           RollingUpdate
+RollingUpdateStrategy:  25% max unavailable, 25% max surge

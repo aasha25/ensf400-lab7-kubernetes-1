@@ -1,0 +1,28 @@
+    1  minicube start
+    2  minikube start
+    3  1-pods
+    4  cd /workspaces/ensf400-lab7-kubernetes-1/1-pods
+    5  kubectl apply -f pods01.yaml
+    6  kubectl get pods -o wide
+    7  kubectl get pods -o json
+    8  kubectl exec -it webserver -- /bin/bashroot@webserver:/#
+    9  kubectl exec -it webserver -- /bin/bash 
+   10  kubectl logs webserver
+   11  kubectl delete -f pods01.yaml
+   12  kubectl get po -o wide
+   13  kubectl apply -f pods02.yaml
+   14  kubectl get po -o wide
+   15  kubectl get po,svc,deploy
+   16  kubectl describe pod webserver
+   17  kubectl exec -it webserver -c webwatcher -- /bin/bash
+   18  kubectl delete -f pods02.yaml
+   19  kubectl apply -f pods03.yaml
+   20  kubectl get po,svc
+   21  kubectl exec mc1 -c 1st -- /bin/cat /usr/share/nginx/html/index.html
+   22  kubectl exec mc1 -c 2nd -- /bin/cat /html/index.html
+   23  kubectl delete -f pods03.yaml
+   24  cd /workspaces/ensf400-lab7-kubernetes-1/2-replicasets
+   25  kubectl apply -f nginx_replicaset.yaml
+   26  kubectl get pods web-6n9cj -o yaml | grep -A 5 owner
+   27  kubectl get po -o wide
+   28  history > commands_ex1.txt
