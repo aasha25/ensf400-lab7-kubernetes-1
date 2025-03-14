@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-div
+spec:
+  serviceAccountName: div
+  automountServiceAccountToken: false
+  containers:
+  - name: my-container
+    image: nginx
+    ports:
+    - containerPort: 80

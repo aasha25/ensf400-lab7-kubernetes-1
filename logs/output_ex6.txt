@@ -1,0 +1,60 @@
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1 (main) $ cd /workspaces/ensf400-lab7-kubernetes-1/6-rbac
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/6-rbac (main) $ kubectl apply -f service-account-div.yaml 
+error: the path "service-account-div.yaml" does not exist
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/6-rbac (main) $ kubectl apply -f service-account.yaml 
+serviceaccount/div created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/6-rbac (main) $ kubectl apply -f role.yaml
+role.rbac.authorization.k8s.io/get-pods created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/6-rbac (main) $ kubectl apply -f role-binding.yaml
+rolebinding.rbac.authorization.k8s.io/div-get-pods created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/6-rbac (main) $ touch pod-using-div-sa.yaml
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/6-rbac (main) $ kubectl apply -f pod01.yaml
+error: the path "pod01.yaml" does not exist
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/6-rbac (main) $ kubectl apply -f pods01.yaml
+pod/webserver created
+@aasha25 ➜ /workspaces/ensf400-lab7-kubernetes-1/6-rbac (main) $  kubectl describe pod webserver 
+Name:             webserver
+Namespace:        default
+Priority:         0
+Service Account:  div
+Node:             minikube/192.168.49.2
+Start Time:       Fri, 14 Mar 2025 12:19:24 +0000
+Labels:           <none>
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.56
+IPs:
+  IP:  10.244.0.56
+Containers:
+  webserver:
+    Container ID:   docker://ab024c31f11db91ea7c541fe50f94f013cd5bc79ed2fa442a9a84560f6546538
+    Image:          nginx:latest
+    Image ID:       docker-pullable://nginx@sha256:9d6b58feebd2dbd3c56ab5853333d627cc6e281011cfd6050fa4bcf2072c9496
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Fri, 14 Mar 2025 12:19:25 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:         <none>
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:                      <none>
+QoS Class:                    BestEffort
+Node-Selectors:               <none>
+Tolerations:                  node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                              node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  16s   default-scheduler  Successfully assigned default/webserver to minikube
+  Normal  Pulling    16s   kubelet            Pulling image "nginx:latest"
+  Normal  Pulled     15s   kubelet            Successfully pulled image "nginx:latest" in 788ms (788ms including waiting). Image size: 191973222 bytes.
+  Normal  Created    15s   kubelet            Created container webserver
+  Normal  Started    15s   kubelet            Started container webserver
