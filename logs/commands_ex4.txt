@@ -1,0 +1,135 @@
+    1  minikube start
+    2  kubectl apply -f <pod config file>
+    3  cd /workspaces/ensf400-lab7-kubernetes-1/1-pods
+    4  kubectl apply -f pods01.yaml
+    5  kubectl get pods
+    6  kubectl get pods -o wide
+    7  $ kubectl get pods -o json
+    8  kubectl get pods -o wide
+    9  minicube start
+   10  minikube start
+   11  1-pods
+   12  cd /workspaces/ensf400-lab7-kubernetes-1/1-pods
+   13  kubectl apply -f pods01.yaml
+   14  kubectl get pods -o wide
+   15  kubectl get pods -o json
+   16  kubectl exec -it webserver -- /bin/bashroot@webserver:/#
+   17  kubectl exec -it webserver -- /bin/bash 
+   18  kubectl logs webserver
+   19  kubectl delete -f pods01.yaml
+   20  kubectl get po -o wide
+   21  kubectl apply -f pods02.yaml
+   22  kubectl get po -o wide
+   23  kubectl get po,svc,deploy
+   24  kubectl describe pod webserver
+   25  kubectl exec -it webserver -c webwatcher -- /bin/bash
+   26  kubectl delete -f pods02.yaml
+   27  kubectl apply -f pods03.yaml
+   28  kubectl get po,svc
+   29  kubectl exec mc1 -c 1st -- /bin/cat /usr/share/nginx/html/index.html
+   30  kubectl exec mc1 -c 2nd -- /bin/cat /html/index.html
+   31  kubectl delete -f pods03.yaml
+   32  cd /workspaces/ensf400-lab7-kubernetes-1/2-replicasets
+   33  kubectl apply -f nginx_replicaset.yaml
+   34  kubectl get pods web-6n9cj -o yaml | grep -A 5 owner
+   35  kubectl get po -o wide
+   36  history > commands_ex1.txt
+   37  touch output_ex1.txt
+   38  code output_ex1.txt
+   39  mkdir -p logs
+   40  mv commands_ex*.txt output_ex*.txt logs/
+   41  cd /workspaces/ensf400-lab7-kubernetes-1/2-replicasets
+   42  kubectl apply -f nginx_replicaset.yaml
+   43  kubectl get rs
+   44  kubectl get pods web-6n9cj -o yaml | grep -A 5 owner
+   45  kubectl get pods web-6n9cj -o yaml
+   46  kubectl get pods
+   47  kubectl get replicaset
+   48  kubectl get pods -o wide
+   49  kubectl get pods web-6n9cj -o yaml | grep -A 5 owner
+   50  kubectl get po
+   51  kubectl get pods web-c4cz4 -o yaml | grep -A 5 owner
+   52  kubectl edit pods web-c4cz4
+   53  kubectl get pods -o wide
+   54  kubectl scale --replicas=6 -f nginx_replicaset.yaml
+   55  kubectl autoscale rs web --max=5
+   56  kubectl apply -f orphan.yaml
+   57  kubectl get pods -o wide
+   58  kubectl delete -f nginx_replicaset.yamlkubectl apply -f orphan.yaml
+   59  kubectl apply -f nginx_replicaset.yaml
+   60  kubectl get pods
+   61  kubectl apply -f orphan.yaml
+   62  kubectl get pods
+   63  kubectl delete -f nginx_replicaset.yaml
+   64  kubectl apply -f nginx_replicaset.yaml
+   65  kubectl get pods
+   66  kubectl apply -f orphan.yaml
+   67  kubectl get rs
+   68  kubectl describe replicaset web
+   69  kubectl apply -f orphan.yaml
+   70  kubectl get pods
+   71  kubectl delete pods orphan
+   72  kubectl get pods
+   73  kubectl delete rs ReplicaSet_name
+   74  kubectl delete -f nginx_replicaset.yaml
+   75  kubectl delete rs ReplicaSet_namekubectl delete -f nginx_replicaset.yaml
+   76  kubectl delete rs nginx_replicaset.yaml --cascade=false
+   77  kubectl delete rs nginx_replicaset --cascade=false
+   78  kubectl get rs
+   79  script -f terminal_log.txt
+   80  cat terminal_log.txt
+   81  history > commands_ex2.txt
+   82  touch output_ex2.txt output_ex3.txt
+   83  code output_ex2.txt
+   84  cd /workspaces/ensf400-lab7-kubernetes-1/3-deployments
+   85  kubectl create -f nginx-dep.yaml
+   86  kubectl get deployments
+   87  kubectl describe deploy
+   88  kubectl get deployments
+   89  kubectl get po
+   90  kubectl scale deployments/nginx-deployment --replicas=4
+   91  kubectl get deployments
+   92  kubectl describe deployments/nginx-deployment
+   93  kubectl get pods -o wide
+   94  kubectl scale deployments/nginx-deployment --replicas=2
+   95  kubectl get deployments
+   96  kubectl set image  deployments/nginx-deployment nginx=nginx:1.9.1
+   97  kubectl get pods -w
+   98  kubectl describe pods
+   99  kubectl rollout undo deployments/nginx-deployment
+  100  kubectl rollout status deployments/nginx-deployment
+  101  kubectl describe deployments | grep Strategy
+  102  history > commands_ex3.txt
+  103  code output_ex3.txt
+  104  minikube start
+  105  cd /workspaces/ensf400-lab7-kubernetes-1/4-services
+  106  kubectl apply -f nginx-svc.yaml
+  107  kubectl get svc my-nginx
+  108  kubectl describe svc my-nginx
+  109  kubectl get po
+  110  kubectl delete pod curl
+  111  kubectl exec nginx-deployment-84f98766ff-jp2ht -- printenv | grep SERVICE
+  112  kubectl scale deployment nginx-deployment --replicas=0
+  113  kubectl scale deployment nginx-deployment --replicas=2
+  114  kubectl get pods -l run=my-nginx -o wide
+  115  kubectl exec nginx-deployment-84f98766ff-mj7r7 -- printenv | grep SERVICE
+  116  kubectl get services kube-dns --namespace=kube-system
+  117  kubectl run curl --image=radial/busyboxplus:curl -i --tty
+  118  nslookup my-nginx
+  119  kubectl delete pod curl
+  120  kubectl run curl --image=radial/busyboxplus:curl -i --tty
+  121  nslookup my-nginx:
+  122  [ root@curl-131556218-9fnch:/ ]:nslookup my-nginx
+  123  nslookup my-nginx
+  124  kubectl delete pod curl
+  125  kubectl run curl --image=radial/busyboxplus:curl -i --tty
+  126  kubectl get pods
+  127  kubectl delete pod curl
+  128  kubectl run curl --image=curlimages/curl:latest -i --tty -- /bin/sh
+  129  kubectl apply -f nginx-svc-nodeport.yaml 
+  130  kubectl get svc my-nginx -o yaml | grep nodePort -C 5
+  131  kubectl get svc my-nginx
+  132  kubectl get nodes -o yaml | grep addresses -C 1
+  133  curl http://192.168.49.2:31704 -k
+  134  curl http://192.168.49.2:32453 -k
+  135  history > commands_ex4.txt
